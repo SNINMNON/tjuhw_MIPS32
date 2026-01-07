@@ -64,18 +64,39 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_x(char *args) {
-	int N;
-	uint32_t addr;
-	if (sscanf(args, "%d %x", &N, &addr) != 2) {
+	if (args == NULL) {
 		printf("Usage: x N EXPR\n");
 		return 0;
 	}
-	addr = addr & 0x1fffffff; // map to physical address
+  
+	int N = 0;
+	int nchar = 0;
+	if (sscanf(args, "%d%n", &N, &nchar) != 1) {
+		printf("Usage: x N EXPR\n");
+		return 0;
+	}
+  
+	char *expression = args + nchar;
+	while (*expression == ' ') expression++;
+	if (*expression == '\0') {
+		printf("Usage: x N EXPR\n");
+		return 0;
+	}
+  
+	bool success = true;
+	uint32_t vaddr = expr(expression, &success);
+	if (!success) {
+		printf("Bad expression\n");
+		return 0;
+	}
+  
+	uint32_t paddr = vaddr & 0x1fffffff;
 	for (int i = 0; i < N; i++) {
-		printf("0x%08x: 0x%08x\n", addr + i*4, mem_read(addr + i*4, 4));
+	  	printf("0x%08x: 0x%08x\n", vaddr + i * 4, mem_read(paddr + i * 4, 4));
 	}
 	return 0;
-}
+  }
+  
 
 static int cmd_p(char *args) {
 	bool success = true;
