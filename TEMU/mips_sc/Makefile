@@ -62,4 +62,4 @@ convert: convert.c
 	gcc $< -o $@
 
 clean: 
-	rm -f -r ./build
+rm -f -r ./build

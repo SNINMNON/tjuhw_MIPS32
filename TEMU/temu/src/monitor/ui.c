@@ -91,7 +91,7 @@ static int cmd_x(char *args) {
 		return 0;
 	}
   
-	uint32_t paddr = vaddr & 0x1fffffff;
+	uint32_t paddr = vaddr & 0x1fffffff; // map to physical address
 	for (int i = 0; i < N; i++) {
 	  	printf("0x%08x: 0x%08x\n", vaddr + i * 4, mem_read(paddr + i * 4, 4));
 	}
