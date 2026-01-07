@@ -1,0 +1,4 @@
+*.bin
+TEMU/build/
+TEMU/mips_sc/build/
+log.txt
