@@ -60,3 +60,6 @@ data.bin: $(TESTCASE_BUILD_DIR)$(USER_PROGRAM)
 
 convert: convert.c
 	gcc $< -o $@
+
+clean: 
+	rm -f -r ./build

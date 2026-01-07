@@ -1,6 +1,7 @@
 #include "monitor.h"
 #include "temu.h"
 #include "expr.h"
+#include "watchpoint.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -109,6 +110,26 @@ static int cmd_p(char *args) {
 	return 0;
 }
 
+static int cmd_w(char *args) {
+	if (args == NULL) {
+		printf("Usage: w EXPR\n");
+		return 0;
+	}
+
+	new_wp(args);
+	return 0;
+}
+
+static int cmd_d(char *args) {
+	if (args == NULL) {
+		printf("Usage: d NO\n");
+		return 0;
+	}
+
+	free_wp(atoi(args));
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -121,6 +142,8 @@ static struct {
 	{ "info", "Display the state of registers", cmd_info },
 	{ "x", "Examine memory: x N EXPR", cmd_x },
 	{ "p", "Evaluate expression EXPR and print the result", cmd_p },
+	{ "w", "Set a watchpoint for expression EXPR", cmd_w },
+	{ "d", "Delete the watchpoint with given NO", cmd_d },
 
 	/* TODO: Add more commands */
 
