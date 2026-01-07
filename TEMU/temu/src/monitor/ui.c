@@ -1,5 +1,6 @@
 #include "monitor.h"
 #include "temu.h"
+#include "expr.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -76,6 +77,17 @@ static int cmd_x(char *args) {
 	return 0;
 }
 
+static int cmd_p(char *args) {
+	bool success = true;
+	uint32_t result = expr(args, &success);
+	if (success) {
+		printf("0x%08x\t\t%d\n", result, result);
+	} else {
+		printf("Bad expression\n");
+	}
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -87,6 +99,7 @@ static struct {
 	{ "si", "Step N instructions exactly, default N = 1", cmd_si },
 	{ "info", "Display the state of registers", cmd_info },
 	{ "x", "Examine memory: x N EXPR", cmd_x },
+	{ "p", "Evaluate expression EXPR and print the result", cmd_p },
 
 	/* TODO: Add more commands */
 
