@@ -38,6 +38,44 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args) {
+	int steps;
+
+	if (args == NULL) {
+		steps = 1;
+	} else {
+		steps = atoi(args);
+	}
+
+	cpu_exec(steps);
+	return 0;
+}
+
+static int cmd_info(char *args) {
+	if (args[0] == 'r') {
+		display_reg();
+	} else if (args[0] == 'w') {
+		//TODO
+	} else {
+		printf("Usage: info [r/w]\n");
+	}
+	return 0;
+}
+
+static int cmd_x(char *args) {
+	int N;
+	uint32_t addr;
+	if (sscanf(args, "%d %x", &N, &addr) != 2) {
+		printf("Usage: x N EXPR\n");
+		return 0;
+	}
+	addr = addr & 0x1fffffff; // map to physical address
+	for (int i = 0; i < N; i++) {
+		printf("0x%08x: 0x%08x\n", addr + i*4, mem_read(addr + i*4, 4));
+	}
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -45,7 +83,10 @@ static struct {
 } cmd_table [] = {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
-	{ "q", "Exit TEMU", cmd_q }
+	{ "q", "Exit TEMU", cmd_q },
+	{ "si", "Step N instructions exactly, default N = 1", cmd_si },
+	{ "info", "Display the state of registers", cmd_info },
+	{ "x", "Examine memory: x N EXPR", cmd_x },
 
 	/* TODO: Add more commands */
 

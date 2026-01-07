@@ -51,3 +51,4 @@ clean:
 	rm -f log.txt
 	rm -f *.bin
 
+cr: clean-temu run
