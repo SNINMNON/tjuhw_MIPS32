@@ -89,3 +89,16 @@ bool update_watchpoints() {
 	}
 	return triggered;
 }
+
+void print_wp() {
+	WP* wp = head;
+	if (wp == NULL) {
+		printf("No watchpoints set.\n");
+		return;
+	}
+	printf("NO.\tExpression\tLast Value\n");
+	while (wp != NULL) {
+		printf("%d\t%s\t0x%08x\n", wp->NO, wp->expr, wp->last_value);
+		wp = wp->next;
+	}
+}

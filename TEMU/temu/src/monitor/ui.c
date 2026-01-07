@@ -57,7 +57,7 @@ static int cmd_info(char *args) {
 	if (args[0] == 'r') {
 		display_reg();
 	} else if (args[0] == 'w') {
-		//TODO
+		print_wp();
 	} else {
 		printf("Usage: info [r/w]\n");
 	}

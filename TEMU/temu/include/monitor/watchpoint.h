@@ -14,5 +14,6 @@ void init_wp_pool();
 void new_wp(char* expression);
 void free_wp(int NO);
 bool update_watchpoints();
+void print_wp();
 
 #endif
