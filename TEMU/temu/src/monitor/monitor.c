@@ -1,4 +1,5 @@
 #include "temu.h"
+#include "trace.h"
 
 #define ENTRY_START 0x80000000
 
@@ -26,6 +27,8 @@ void init_monitor(int argc, char *argv[]) {
 	/* Open the log file. */
 	exec_file = argv[1];
 	init_log();
+	
+	init_trace("golden_trace.txt");
 
 	/* Compile the regular expressions. */
 	init_regex();

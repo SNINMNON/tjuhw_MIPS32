@@ -49,6 +49,7 @@ clean:
 	rm -f -r $(BUILD_DIR)
 	rm -f -r ./mips_sc/build
 	rm -f log.txt
+	rm -f golden_trace.txt
 	rm -f *.bin
 
 cr: clean-temu run

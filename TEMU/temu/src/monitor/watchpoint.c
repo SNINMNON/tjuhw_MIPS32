@@ -96,9 +96,9 @@ void print_wp() {
 		printf("No watchpoints set.\n");
 		return;
 	}
-	printf("NO.\tExpression\tLast Value\n");
+	printf("%-4s%-10s\t%s\n", "NO", "Last Value", "Expression");
 	while (wp != NULL) {
-		printf("%d\t%s\t0x%08x\n", wp->NO, wp->expr, wp->last_value);
+		printf("%-4d0x%08x\t%s\n", wp->NO, wp->last_value, wp->expr);
 		wp = wp->next;
 	}
 }

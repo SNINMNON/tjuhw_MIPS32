@@ -2,6 +2,7 @@
 #include "monitor.h"
 #include "reg.h"
 #include "special.h"
+#include "trace.h"
 
 extern uint32_t instr;
 extern char assembly[80];
@@ -34,6 +35,7 @@ make_helper(addi) {
         assert(0);
     } else {
 		reg_w(op_dest->reg) = (uint32_t)s;
+		trace_log(cpu.pc, op_dest->reg, reg_w(op_dest->reg));
 	}
 	sprintf(assembly, "addi   %s,   %s,   0x%04x", REG_NAME(op_dest->reg), REG_NAME(op_src1->reg), op_src2->imm);
 }
@@ -41,24 +43,28 @@ make_helper(addi) {
 make_helper(addiu) {
 	decode_imm_type(instr);
 	reg_w(op_dest->reg) = op_src1->val + (int32_t)(int16_t)op_src2->imm;
+	trace_log(cpu.pc, op_dest->reg, reg_w(op_dest->reg));
 	sprintf(assembly, "addiu   %s,   %s,   0x%04x", REG_NAME(op_dest->reg), REG_NAME(op_src1->reg), op_src2->imm);
 }
 
 make_helper(andi) {
 	decode_imm_type(instr);
 	reg_w(op_dest->reg) = op_src1->val & op_src2->val;
+	trace_log(cpu.pc, op_dest->reg, reg_w(op_dest->reg));
 	sprintf(assembly, "andi   %s,   %s,   0x%04x", REG_NAME(op_dest->reg), REG_NAME(op_src1->reg), op_src2->imm);
 }
 
 make_helper(lui) {
 	decode_imm_type(instr);
 	reg_w(op_dest->reg) = (op_src2->val << 16);
+	trace_log(cpu.pc, op_dest->reg, reg_w(op_dest->reg));
 	sprintf(assembly, "lui   %s,   0x%04x", REG_NAME(op_dest->reg), op_src2->imm);
 }
 
 make_helper(ori) {
 	decode_imm_type(instr);
 	reg_w(op_dest->reg) = op_src1->val | op_src2->val;
+	trace_log(cpu.pc, op_dest->reg, reg_w(op_dest->reg));
 	sprintf(assembly, "ori   %s,   %s,   0x%04x", REG_NAME(op_dest->reg), REG_NAME(op_src1->reg), op_src2->imm);
 }
 
@@ -83,6 +89,7 @@ make_helper(lb) {
 	uint32_t addr = op_src1->val + (int32_t)(int16_t)op_src2->imm;
 	addr = addr & 0x1fffffff;
 	reg_w(op_dest->reg) = (int32_t)(int8_t)mem_read(addr, 1);
+	trace_log(cpu.pc, op_dest->reg, reg_w(op_dest->reg));
 	sprintf(assembly, "lb   %s,   0x%04x(%s)", REG_NAME(op_dest->reg), op_src2->imm, REG_NAME(op_src1->reg));
 }
 
@@ -91,6 +98,7 @@ make_helper(lw) {
 	uint32_t addr = op_src1->val + (int32_t)(int16_t)op_src2->imm;
 	addr = addr & 0x1fffffff;
 	reg_w(op_dest->reg) = mem_read(addr, 4);
+	trace_log(cpu.pc, op_dest->reg, reg_w(op_dest->reg));
 	sprintf(assembly, "lw   %s,   0x%04x(%s)", REG_NAME(op_dest->reg), op_src2->imm, REG_NAME(op_src1->reg));
 }
 
